@@ -1,6 +1,7 @@
 package com.example.asexperiment_end.adapter.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -34,7 +35,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
     private ListView listView;
     private ListViewAdapter listViewAdapter;
 
-
     private LinkedList<RecordBean> records = new LinkedList<>();
 
     private String date = "";
@@ -48,7 +48,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_show,container,false);
+        //rootView = inflater.inflate(R.layout.fragment_show,container,false);
+        rootView = View.inflate(getContext(),R.layout.fragment_show,null);
         initView();
         return rootView;
     }
@@ -57,7 +58,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
 
         textView = rootView.findViewById(R.id.day_inout);
         listView = rootView.findViewById(R.id.listView);
-        listViewAdapter = new ListViewAdapter(getContext());
+        listViewAdapter = new ListViewAdapter(getActivity());
         listViewAdapter.setData(records);
         listView.setAdapter(listViewAdapter);
         Utility.setListViewHeightBasedOnChildren(listView);
@@ -74,7 +75,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
 
         records = GlobalUtil.getInstance().dataBaseHelper.readRecords(date);
         if (listViewAdapter==null){
-            listViewAdapter = new ListViewAdapter(getActivity().getApplicationContext());
+            listViewAdapter = new ListViewAdapter(getContext());
         }
         listViewAdapter.setData(records);
         listView.setAdapter(listViewAdapter);

@@ -1,5 +1,7 @@
 package com.example.asexperiment_end.adapter;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -15,9 +17,10 @@ import java.util.List;
 public class MainViewPagerAdapter extends FragmentPagerAdapter {
     LinkedList<MainFragment> fragments = new LinkedList<>();
     LinkedList<String> dates = new LinkedList<>();
-
-    public MainViewPagerAdapter(@NonNull FragmentManager fm) {
+    Context context;
+    public MainViewPagerAdapter(@NonNull FragmentManager fm,Context context) {
         super(fm);
+        this.context = context;
         initFragments();
     }
 
@@ -32,11 +35,14 @@ public class MainViewPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
-    public void reload(){
-        for (MainFragment fragment:
-        fragments){
-            fragment.reload();
-        }
+//    public void reload(){
+//        for (MainFragment fragment:
+//        fragments){
+//            fragment.reload();
+//        }
+//    }
+    public void reload(int position){
+        fragments.get(position).reload();
     }
 
     public String getDate(int currentPage){

@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         incomeTicker.setAnimationInterpolator(new OvershootInterpolator());
 
         viewPager = findViewById(R.id.view_pager);
-        mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
+        mainViewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(),MainActivity.this);
         mainViewPagerAdapter.notifyDataSetChanged();
         viewPager.setAdapter(mainViewPagerAdapter);
         viewPager.setOnPageChangeListener(this);
@@ -82,12 +83,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mainViewPagerAdapter.reload();
+        mainViewPagerAdapter.reload(currentPage);
         setHeader();
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        mainViewPagerAdapter.reload(position);
+        Log.d("mainViewPagerAdapter===", String.valueOf(position));
         setHeader();
     }
 
