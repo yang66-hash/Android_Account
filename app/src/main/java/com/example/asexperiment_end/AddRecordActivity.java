@@ -48,7 +48,7 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
 
     private CategoryRecyclerAdapter categoryRecyclerAdapter;
 
-    private RecordBean recordBean;
+    private RecordBean recordBean = new RecordBean();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,7 +103,11 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
             public void onPageScrollStateChanged(int state) {}
         });
 
-
+        RecordBean temp = (RecordBean) getIntent().getSerializableExtra("record");
+        if (temp!=null){
+            isedit =true;
+            this.recordBean = temp;
+        }
 
 
 
@@ -182,9 +186,6 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void handleDone(View view) {
-
-        recordBean = new RecordBean();
-
         editText = findViewById(R.id.editremark);
         if (editText.getText().toString().equals("")){
             remark = category;
@@ -197,12 +198,16 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
         Log.d("日志信息",editText.getText().toString());
 
         if (buffer.length()!=0){
-            recordBean.setMoney(Double.valueOf(buffer.toString()));
-            recordBean.setType(type);
-            recordBean.setRemark(remark);
-            recordBean.setCategory(category);
+            this.recordBean.setMoney(Double.valueOf(buffer.toString()));
+            this.recordBean.setType(type);
+            this.recordBean.setRemark(remark);
+            this.recordBean.setCategory(category);
             GlobalUtil.getInstance().setContext(this);
-            GlobalUtil.getInstance().dataBaseHelper.addRecord(recordBean);
+            if (isedit){
+                GlobalUtil.getInstance().dataBaseHelper.editRecord(recordBean.getUuid(),recordBean);
+            }else
+                GlobalUtil.getInstance().dataBaseHelper.addRecord(recordBean);
+
             finish();
         }else {
             Toast.makeText(getApplicationContext(), "金额忘记了呀", Toast.LENGTH_SHORT).show();

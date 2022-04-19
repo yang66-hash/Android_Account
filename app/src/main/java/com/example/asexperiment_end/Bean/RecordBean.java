@@ -2,10 +2,11 @@ package com.example.asexperiment_end.Bean;
 
 import com.example.asexperiment_end.Utils.DateUtil;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-public class RecordBean {
+public class RecordBean implements Serializable {
 
     //定义类型的枚举类型
     public enum RecordType{

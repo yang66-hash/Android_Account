@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         week = findViewById(R.id.date_text);
 
         GlobalUtil.getInstance().setContext(getApplicationContext());
+        GlobalUtil.getInstance().setMainActivity(this);
         outcomeTicker = findViewById(R.id.account_out);
         outcomeTicker.setCharacterLists(TickerUtils.provideNumberList());
         outcomeTicker.setAnimationDuration(1000);//设置动画的持续时间
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         viewPager.setAdapter(mainViewPagerAdapter);
         viewPager.setOnPageChangeListener(this);
         viewPager.setCurrentItem(mainViewPagerAdapter.getLastIndex());
+        viewPager.setOffscreenPageLimit(mainViewPagerAdapter.getCount());
+
 
         setHeader();
         findViewById(R.id.addbill).setOnClickListener(new View.OnClickListener() {
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         });
     }
 
-    private void setHeader(){
+    public void setHeader(){
         String date = mainViewPagerAdapter.getDate(currentPage);
         int outcome = GlobalUtil.getInstance().dataBaseHelper.getSumByType(1,date);
         int income = GlobalUtil.getInstance().dataBaseHelper.getSumByType(2,date);
@@ -83,14 +86,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mainViewPagerAdapter.reload(currentPage);
+        mainViewPagerAdapter.reload();
         setHeader();
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mainViewPagerAdapter.reload(position);
-        Log.d("mainViewPagerAdapter===", String.valueOf(position));
         setHeader();
     }
 

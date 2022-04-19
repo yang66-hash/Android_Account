@@ -16,6 +16,8 @@ public class GlobalUtil {
 
     private Context context;
     public DataBaseHelper dataBaseHelper;
+    private MainActivity mainActivity;
+
 
     private boolean iscostload = false;
     private boolean isearnload = false;
@@ -24,6 +26,14 @@ public class GlobalUtil {
     private LinkedList<CategoryResBean> costRes = new LinkedList<>();
     //存放进账图标
     private LinkedList<CategoryResBean> earnRes = new LinkedList<>();
+
+    public MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+    public void setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
 
     public void setContext(Context context) {
         this.context = context;

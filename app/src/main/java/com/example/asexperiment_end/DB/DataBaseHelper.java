@@ -57,11 +57,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Log.d(TAG,recordBean.getUuid()+"被成功添加。");
     }
 
-    public void delete(String uuid){
+    public boolean delete(String uuid){
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        int count = sqLiteDatabase.delete(TABLE_NAME,"uuid = ?",new String[]{uuid});
+        sqLiteDatabase.close();
+        if (count!=0)
+            return true;
+        return false;
     }
 
-
+    public void editRecord(String uuid,RecordBean record){
+        delete(uuid);
+        record.setUuid(uuid);
+        addRecord(record);
+    }
 
     public LinkedList<RecordBean> readRecords(String dateStr){
         LinkedList<RecordBean> records = new LinkedList<>();

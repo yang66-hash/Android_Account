@@ -20,7 +20,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.asexperiment_end.AddRecordActivity;
 import com.example.asexperiment_end.Bean.RecordBean;
+import com.example.asexperiment_end.MainActivity;
 import com.example.asexperiment_end.R;
 import com.example.asexperiment_end.Utils.DateUtil;
 import com.example.asexperiment_end.Utils.GlobalUtil;
@@ -101,10 +103,18 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (i==0){
-                    Toast.makeText(getContext(),listItem[0],Toast.LENGTH_SHORT).show();
+                    String uuid = records.get(position).getUuid();
+                    GlobalUtil.getInstance().dataBaseHelper.delete(uuid);
+                    reload();
+                    GlobalUtil.getInstance().getMainActivity().setHeader();
                 }
                 else {
-                    Toast.makeText(getContext(),listItem[0],Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("record",records.get(position));
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent,MainActivity.FLAG);
+
                 }
             }
         });
