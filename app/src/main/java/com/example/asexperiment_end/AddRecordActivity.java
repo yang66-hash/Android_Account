@@ -1,5 +1,8 @@
 package com.example.asexperiment_end;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.asexperiment_end.Bean.RecordBean;
+import com.example.asexperiment_end.Utils.DateUtil;
 import com.example.asexperiment_end.Utils.GlobalUtil;
 import com.example.asexperiment_end.adapter.CategoryRecyclerAdapter;
 import com.example.asexperiment_end.adapter.ViewPagerAdapter;
@@ -27,19 +32,25 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
-public class AddRecordActivity extends AppCompatActivity implements View.OnClickListener,CategoryRecyclerAdapter.OnCategoryClickListener {
+public class AddRecordActivity extends AppCompatActivity implements View.OnClickListener, CategoryRecyclerAdapter.OnCategoryClickListener {
 
     private static String ATG = "AddRecordActivity";
-    private StringBuffer buffer=new StringBuffer();
+    private StringBuffer buffer = new StringBuffer();
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    String[] titleArray = new String[]{"支出","收入"};
+    String[] titleArray = new String[]{"支出", "收入"};
     private List<Fragment> fragments = new ArrayList<>();
     private EditText editText;
     private boolean isedit = false;
+
+    private DatePickerDialog datePickerDialog;
+    private int year, monthOfYear, dayOfMonth;
+    public static String date;
+    private Button dateButton;
 
     private TextView amountText;
     private String category = "General";
@@ -60,7 +71,7 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
         viewPager = findViewById(R.id.in_out_viewpager);
         fragments.add(new OutcomeFragment());
         fragments.add(new IncomeFragment());
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),fragments,titleArray);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titleArray);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -81,34 +92,66 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.keyboard_back).setOnClickListener(this);
         findViewById(R.id.keyboard_done).setOnClickListener(this);
         findViewById(R.id.keyboard_clean).setOnClickListener(this);
+        dateButton = findViewById(R.id.keyboard_date);
+
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(calendar.YEAR);
+        monthOfYear = calendar.get(calendar.MONTH);
+        dayOfMonth = calendar.get(calendar.DAY_OF_MONTH);
+
+        /**
+         * 实例化DatePickerDialog
+         */
+        datePickerDialog = new DatePickerDialog(this, AlertDialog.THEME_HOLO_LIGHT, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                date = DateUtil.getFormattedDate(year,monthOfYear,dayOfMonth);
+                dateButton.setText(year + "年" + monthOfYear + "月" + dayOfMonth + "日");
+            }
+        }, year, monthOfYear, dayOfMonth);
+
+        /**
+         * 对日期选择器按钮设置监听事件
+         */
+        dateButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // 点击日期选择器按钮时显示出日期对话框
+                datePickerDialog.show();
+            }
+        });
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                categoryRecyclerAdapter = ((MyFragment)fragments.get(position)).getCategoryRecyclerAdapter();
+                categoryRecyclerAdapter = ((MyFragment) fragments.get(position)).getCategoryRecyclerAdapter();
                 categoryRecyclerAdapter.setOnCategoryClickListener(AddRecordActivity.this);
                 categoryRecyclerAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onPageSelected(int position) {
-                categoryRecyclerAdapter = ((MyFragment)fragments.get(position)).getCategoryRecyclerAdapter();
-                if (position==0)
+                categoryRecyclerAdapter = ((MyFragment) fragments.get(position)).getCategoryRecyclerAdapter();
+                if (position == 0)
                     type = RecordBean.RecordType.RECORD_TYPE_EXPENSE;
                 else
                     type = RecordBean.RecordType.RECORD_TYPE_INCOME;
                 categoryRecyclerAdapter.setOnCategoryClickListener(AddRecordActivity.this);
                 categoryRecyclerAdapter.notifyDataSetChanged();
             }
+
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         RecordBean temp = (RecordBean) getIntent().getSerializableExtra("record");
-        if (temp!=null){
-            isedit =true;
+        if (temp != null) {
+            isedit = true;
             this.recordBean = temp;
         }
-
 
 
     }
@@ -117,7 +160,7 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.keyboard_point:
-                Log.d("调试日志","case执行");
+                Log.d("调试日志", "case执行");
                 handlePoint(view);
                 break;
             case R.id.keyboard_back:
@@ -140,8 +183,8 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
             case R.id.keyboard_seven:
             case R.id.keyboard_eight:
             case R.id.keyboard_nine:
-                if(buffer.length()==1&&buffer.charAt(0)=='0')
-                    Toast.makeText(this,"金额格式不符规范，请清空重试",Toast.LENGTH_SHORT).show();
+                if (buffer.length() == 1 && buffer.charAt(0) == '0')
+                    Toast.makeText(this, "金额格式不符规范，请清空重试", Toast.LENGTH_SHORT).show();
                 else handleNum(view);
                 break;
             default:
@@ -149,32 +192,31 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    private void handleNum(View view){
+
+    private void handleNum(View view) {
         Button button = (Button) view;
-        String input =button.getText().toString();
+        String input = button.getText().toString();
         String result = buffer.toString();
-        Log.d("调试日志",buffer.toString());
-        if(result.contains(".")){
+        Log.d("调试日志", buffer.toString());
+        if (result.contains(".")) {
             String[] temp = buffer.toString().split("\\.");
             Log.d("调试日志", Arrays.toString(temp));
             if (result.split("\\.").length == 1 || result.split("\\.")[1].length() < 2) {
                 buffer.append(input);
             }
-        }
-        else {
+        } else {
             buffer.append(input);
         }
-        Log.d("调试日志",buffer.toString());
+        Log.d("调试日志", buffer.toString());
         refreshText();
     }
 
     private void handlePoint(View view) {
-        if(buffer.length()==0){
+        if (buffer.length() == 0) {
             buffer.append("0.");
-            Log.d("调试日志",buffer.toString());
-        }
-        else {
-            if(!buffer.toString().contains(".")){
+            Log.d("调试日志", buffer.toString());
+        } else {
+            if (!buffer.toString().contains(".")) {
                 buffer.append(".");
             }
         }
@@ -187,52 +229,51 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
 
     private void handleDone(View view) {
         editText = findViewById(R.id.editremark);
-        if (editText.getText().toString().equals("")){
+        if (editText.getText().toString().equals("")) {
             remark = category;
-        }
-        else
+        } else
             remark = editText.getText().toString();
-        Log.d("调试日志记录的备注",remark);
-        Log.d("调试日志记录的category",category);
-        Log.d("调试日志记录的type",type.toString());
-        Log.d("日志信息",editText.getText().toString());
+        Log.d("调试日志记录的备注", remark);
+        Log.d("调试日志记录的category", category);
+        Log.d("调试日志记录的type", type.toString());
+        Log.d("日志信息", editText.getText().toString());
 
-        if (buffer.length()!=0){
+        if (buffer.length() != 0) {
             this.recordBean.setMoney(Double.valueOf(buffer.toString()));
             this.recordBean.setType(type);
             this.recordBean.setRemark(remark);
             this.recordBean.setCategory(category);
+            this.recordBean.setDate(date);
+            Log.d("日期",date);
             GlobalUtil.getInstance().setContext(this);
-            if (isedit){
-                GlobalUtil.getInstance().dataBaseHelper.editRecord(recordBean.getUuid(),recordBean);
-            }else
+            if (isedit) {
+                GlobalUtil.getInstance().dataBaseHelper.editRecord(recordBean.getUuid(), recordBean);
+            } else
                 GlobalUtil.getInstance().dataBaseHelper.addRecord(recordBean);
-
             finish();
-        }else {
+        } else {
             Toast.makeText(getApplicationContext(), "金额忘记了呀", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     private void handleClean(View view) {
-        if(buffer.length()!=0)
-            buffer.deleteCharAt(buffer.length()-1);
+        if (buffer.length() != 0)
+            buffer.deleteCharAt(buffer.length() - 1);
         refreshText();
     }
 
-    private void refreshText(){
+    private void refreshText() {
         String showtext = buffer.toString();
-        if (showtext.contains(".")){
-            if(showtext.split("\\.").length==1){
-                amountText.setText(showtext+"00");
-            }else if(showtext.split("\\.")[1].length()==1){
-                amountText.setText(showtext+"0");
-            }else{
+        if (showtext.contains(".")) {
+            if (showtext.split("\\.").length == 1) {
+                amountText.setText(showtext + "00");
+            } else if (showtext.split("\\.")[1].length() == 1) {
+                amountText.setText(showtext + "0");
+            } else {
                 amountText.setText(showtext);
             }
-        }
-        else {
+        } else {
             if (showtext.equals("")) {
                 amountText.setText("0.00");
 
@@ -247,6 +288,5 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     public void onClikCategory(String category) {
         this.category = category;
     }
-
 
 }

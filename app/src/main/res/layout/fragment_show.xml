@@ -11,10 +11,11 @@
             android:id="@+id/day_inout"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:background="#8ACD3C"
+            android:background="#EBECEB"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:text="6月22日"
+
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 

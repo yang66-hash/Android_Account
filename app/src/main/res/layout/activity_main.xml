@@ -16,7 +16,7 @@
         android:background="@color/teal_200">
         <RelativeLayout
             android:id="@+id/title"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="天天记账"
-                android:textSize="23sp" />
+                android:textSize="30sp" />
         </RelativeLayout>
 
 
@@ -59,12 +59,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:textSize="18sp"
                         android:text="支出"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:textSize="18sp"
                         android:text="收入"
                         />
                     <TextView
@@ -84,6 +86,7 @@
                         android:layout_gravity="center"
                         android:text="星期四"
                         android:textColor="@color/colorPrimaryDark"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <com.robinhood.ticker.TickerView
@@ -92,7 +95,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@android:color/white"
-                        android:textSize="30sp" />
+                        android:textSize="26sp" />
 
                     <com.robinhood.ticker.TickerView
                         android:id="@+id/account_in"
@@ -100,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@android:color/white"
-                        android:textSize="30sp" />
+                        android:textSize="26sp" />
                     <TextView/>
                 </TableRow>
             </TableLayout>

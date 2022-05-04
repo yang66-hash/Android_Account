@@ -19,6 +19,11 @@ public class DateUtil {
         return formatter.format(new Date());
     }
 
+    public static String getFormattedDate(int year,int month,int day){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(new Date(year-1900,month,day));
+    }
+
     private static Date strToDate(String date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -42,8 +47,9 @@ public class DateUtil {
         String[] months ={"1月", "2月", "3月", "4月", "5月", "6月","7月", "8月","9月","10月", "11月", "12月"};
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(strToDate(date));
+        int year = calendar.get(Calendar.YEAR);
         int monthIndex = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return  months[monthIndex] +day+"日";
+        return  year + "年" + months[monthIndex] + day +"日";
     }
 }

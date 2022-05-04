@@ -66,6 +66,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    public void deleteAllInRecord(){
+
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        sqLiteDatabase.execSQL("delete from record",new String[]{});
+        sqLiteDatabase.execSQL("update sqlite_sequence set seq=0 where name=?",new String[]{TABLE_NAME});
+        sqLiteDatabase.close();
+    }
+
     public void editRecord(String uuid,RecordBean record){
         delete(uuid);
         record.setUuid(uuid);

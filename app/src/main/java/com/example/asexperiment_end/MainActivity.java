@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
@@ -19,6 +20,16 @@ import com.example.asexperiment_end.adapter.MainViewPagerAdapter;
 import com.example.asexperiment_end.adapter.fragments.MainFragment;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
@@ -34,7 +45,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setElevation(0);
+        //每月月初清空数据
+        isFirstDayOfMonth();
 
         viewPager = findViewById(R.id.view_pager);
         week = findViewById(R.id.date_text);
@@ -58,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         viewPager.setCurrentItem(mainViewPagerAdapter.getLastIndex());
         viewPager.setOffscreenPageLimit(mainViewPagerAdapter.getCount());
 
-
         setHeader();
+
         findViewById(R.id.addbill).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,6 +80,18 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             }
         });
     }
+
+    public void isFirstDayOfMonth(){
+        String datetime = DateUtil.getFormattedDate();
+        String[] temp =  datetime.split("-");
+        if (temp[2].equals("1")){
+            GlobalUtil.getInstance().setContext(this);
+            GlobalUtil.getInstance().dataBaseHelper.deleteAllInRecord();
+        }
+
+    }
+
+
 
     public void setHeader(){
         String date = mainViewPagerAdapter.getDate(currentPage);

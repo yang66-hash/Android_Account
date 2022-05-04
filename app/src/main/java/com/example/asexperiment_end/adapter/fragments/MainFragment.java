@@ -1,24 +1,19 @@
 package com.example.asexperiment_end.adapter.fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.example.asexperiment_end.AddRecordActivity;
 import com.example.asexperiment_end.Bean.RecordBean;
@@ -26,7 +21,6 @@ import com.example.asexperiment_end.MainActivity;
 import com.example.asexperiment_end.R;
 import com.example.asexperiment_end.Utils.DateUtil;
 import com.example.asexperiment_end.Utils.GlobalUtil;
-import com.example.asexperiment_end.Utils.Utility;
 import com.example.asexperiment_end.adapter.ListViewAdapter;
 
 import java.util.LinkedList;
@@ -63,7 +57,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
         listViewAdapter = new ListViewAdapter(getActivity());
         listViewAdapter.setData(records);
         listView.setAdapter(listViewAdapter);
-        Utility.setListViewHeightBasedOnChildren(listView);
 
         if (listViewAdapter.getCount()>0){
             rootView.findViewById(R.id.no_record_layout).setVisibility(View.INVISIBLE);

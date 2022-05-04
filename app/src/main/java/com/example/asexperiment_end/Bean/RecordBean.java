@@ -3,7 +3,10 @@ package com.example.asexperiment_end.Bean;
 import com.example.asexperiment_end.Utils.DateUtil;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public class RecordBean implements Serializable {
@@ -31,7 +34,6 @@ public class RecordBean implements Serializable {
 
     public RecordBean() {
         this.uuid = UUID.randomUUID().toString();
-        this.date = DateUtil.getFormattedDate();
         timesstamp = System.currentTimeMillis();
     }
     public long getTimesstamp() {
