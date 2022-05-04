@@ -223,11 +223,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/editremark"
-            app:tabIndicatorColor="#00FF00"
+            app:tabIndicatorColor="#000000"
             app:tabIndicatorFullWidth="false"
             app:tabMode="fixed"
             app:tabRippleColor="#00000000"
-            app:tabSelectedTextColor="#25EF69"
+            app:tabSelectedTextColor="#000000"
             app:tabTextColor="@color/black" />
 
         <androidx.viewpager.widget.ViewPager
