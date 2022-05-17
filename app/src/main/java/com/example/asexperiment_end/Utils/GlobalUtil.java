@@ -54,8 +54,8 @@ public class GlobalUtil {
             R.drawable.icon_ticket_white,  R.drawable.icon_book_white,
             R.drawable.icon_medical_white,R.drawable.icon_transfer_white
     };
-    private static String[] costTitle = { "General","food", "Drinks","Groceries", "Shopping", "Personal","Entertain","Movies", "Social", "Transport",
-            "App Store","Mobile","Computer","Gifts", "Housing", "Travel","Tickets","Books", "Medical","Transfer"};
+    private static String[] costTitle = { "总体","食物", "饮料","杂货", "购物", "个人","娱乐","电影", "社交", "交通",
+            "应用","手机","电脑","礼物", "家居", "旅游","门票","书", "医疗","车票"};
 
 
     private static int[] earnIconRes = {
@@ -64,7 +64,7 @@ public class GlobalUtil {
             R.drawable.icon_parttime_white,R.drawable.icon_bonus_white,
             R.drawable.icon_investment_white};
 
-    private static String[] earnTitle = {"General", "Reimburse", "Salary","RedPocket","Part-time", "Bonus","Investment"};
+    private static String[] earnTitle = {"总体", "报销", "工资","红包","兼职", "奖金","投资"};
 
     //只是提供一个单实例
     public static GlobalUtil getInstance(){
