@@ -53,7 +53,7 @@ public class AddRecordActivity extends AppCompatActivity implements View.OnClick
     private Button dateButton;
 
     private TextView amountText;
-    private String category = "General";
+    private String category = "任意";
     private String remark = category;
     private RecordBean.RecordType type = RecordBean.RecordType.RECORD_TYPE_EXPENSE;
 
